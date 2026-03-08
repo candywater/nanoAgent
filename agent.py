@@ -52,8 +52,21 @@ tools = [
 
 
 def execute_bash(command):
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    return result.stdout + result.stderr
+    try:
+        result = subprocess.run(
+            command,
+            shell=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=120,
+        )
+    except Exception as e:
+        return f"Command execution failed: {e}"
+    stdout = result.stdout or ""
+    stderr = result.stderr or ""
+    return stdout + stderr
 
 
 def read_file(path):
