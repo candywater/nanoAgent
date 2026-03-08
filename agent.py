@@ -70,13 +70,22 @@ def execute_bash(command):
 
 
 def read_file(path):
-    with open(path, "r") as f:
-        return f.read()
+    try:
+        with open(path, "r", encoding="utf-8", errors="replace") as f:
+            return f.read()
+    except Exception as e:
+        return f"Read failed: {e}"
 
 
 def write_file(path, content):
-    with open(path, "w") as f:
-        f.write(content)
+    try:
+        dirpath = os.path.dirname(path)
+        if dirpath:
+            os.makedirs(dirpath, exist_ok=True)
+        with open(path, "w", encoding="utf-8", errors="replace") as f:
+            f.write(content)
+    except Exception as e:
+        return f"Write failed: {e}"
     return f"Wrote to {path}"
 
 
